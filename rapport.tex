@@ -50,9 +50,22 @@ This edge detector can cope with the presence of speckle, which can be modeled a
 \section{Introduction}
 \subsection{Préface}
 
+En analyse d'images, la segmentation est une étape essentielle, préliminaire a des traitements de haut niveau tels que la classification, la détection ou l'extraction d'objets. Elle consiste à décomposer une image en régions homogènes. Les deux principales approches sont l'approche région et l'approche contour. L'approche région cherche à regrouper les pixels présentant des propriétés communes tandis que l'approche contour vise à détecter les transitions entre régions. Des détecteurs efficaces ont été développés dans le cadre de l'imagerie optique, mais s'avèrent inadaptés aux images radar de par la présence d'un bruit multiplicatif appelé speckle.
 
+\subsection{Objectif du projet}
 
-\subsection{Rappel du sujet}
+L'objectif de ce projet est d'effectuer la segmentation d'une image radar a synthèse d'ouverture (Image RSO ou Image SAR pour Synthetic Aperture Radar) à l'aide d'une méthode originale de détection de
+ruptures appliquée successivement sur les lignes et colonnes de l'image. La méthode
+est issue d'une publication intitulée “An Optimal Multiedge Detector for SAR Image
+Segmentation” publiée en mai 1998 dans la revue IEEE Transactions on Geoscience
+and Remote Sensing
+
+\section{Génération d'une ligne d'image SAR}
+
+Cette partie consiste a générer des lignes d'image radar conformément au modèle proposée par l'article. La méthode de segmentation choisie sera d'abord testée sur ces lignes
+avant d'être appliquée a des images entières.
+
+\subsection{Ligne d'image non bruitée R(x)}
 
 
 
