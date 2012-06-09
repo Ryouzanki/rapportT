@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%           Auteur :  P.TRAN BA, E.BOUTTIER         %
+%           Auteur :  P.TRAN BA, E.BOUTTIER                        %
 %         Création :  08/06/2012 18:05                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -87,9 +87,9 @@ This edge detector can cope with the presence of speckle, which can be modeled a
 
 \begin{abstract}
 
-Ce rapport traite d'un moyen de détection de rupture utilisant le Rapport des moyennes pondérées exponentiellement (ROEWA) normalisé sur chaque côté d'un pixel central. Ce processus est utilisé dans chaque direction, horizontale comme verticale et l'amplitude de ces deux composantes permet d'obtenir une carte des ruptures en intensité.
+    Ce rapport traite d'une méthode de détection de rupture utilisant le rapport des moyennes pondérées exponentiellement (ROEWA) normalisé sur chaque côté d'un pixel central. Elle permet ainsi d'otenir une carte des ruptures en intensité. Pour améliorer son efficacité, le processus peut-être appliqué suivant plusieurs directions, par exemple horizontalement et verticalement, les différentes composantes étant ensuite moyennées quadratiquement.
 
-Ce détecteur de rupture fonctionne aussi avec la présence de Speckle, qui peuvent être modélisés comme de forts bruits multiplicatif. Ce rapport décrit étape par étape la simulation d'une segmentation sous MaltLab.
+    Ce détecteur de rupture est particulièrement adapté pour traiter les signaux avec présence de bruit speckle multiplicatif, tel que les images radars à synthèse d'ouvertue (Synthetic Aperture Radar — SAR). Ce rapport décrit étape par étape la simulation d'une ségmentation sous MaltLab.
 
 \end{abstract}
 
@@ -102,22 +102,24 @@ Ce détecteur de rupture fonctionne aussi avec la présence de Speckle, qui peuv
 \section{Introduction}
 \subsection{Préface}
 
-En analyse d'images, la segmentation est une étape essentielle, préliminaire a des traitements de haut niveau tels que la classification, la détection ou l'extraction d'objets. Elle consiste à décomposer une image en régions homogènes. Les deux principales approches sont l'approche région et l'approche contour. L'approche région cherche à regrouper les pixels présentant des propriétés communes tandis que l'approche contour vise à détecter les transitions entre régions. Des détecteurs efficaces ont été développés dans le cadre de l'imagerie optique, mais s'avèrent inadaptés aux images radar de par la présence d'un bruit multiplicatif appelé speckle.
+En analyse d'images, la segmentation est une étape essentielle, préliminaire a des traitements de haut niveau tels que la classification, la détection ou l'extraction d'objets. Elle consiste à décomposer une image en régions homogènes. Les deux principales approches sont l'approche région et l'approche contour. L'approche région cherche à regrouper les pixels présentant des propriétés communes tandis que l'approche contour vise à détecter les transitions entre régions. Des détecteurs efficaces ont été développés dans le cadre de l'imagerie optique, mais s'avèrent inadaptés aux images SAR de par la présence d'un bruit speckle multiplicatif.
 
 \subsection{Objectif du projet}
 
-L'objectif de ce projet est d'effectuer la segmentation d'une image radar a synthèse d'ouverture (Image RSO ou Image SAR pour Synthetic Aperture Radar) à l'aide d'une méthode originale de détection de
+L'objectif de ce projet est d'effectuer la segmentation d'une image radar a synthèse
+d'ouverture (image SAR) à l'aide d'une méthode originale de détection de
 ruptures appliquée successivement sur les lignes et colonnes de l'image. La méthode
 est issue d'une publication intitulée “An Optimal Multiedge Detector for SAR Image
 Segmentation” publiée en mai 1998 dans la revue IEEE Transactions on Geoscience
-and Remote Sensing
+and Remote Sensing.
 
 \newpage
 
 \section{Génération d'une ligne d'image SAR}
 
-Cette partie consiste a générer des lignes d'image radar conformément au modèle proposée par l'article. La méthode de segmentation choisie sera d'abord testée sur ces lignes
-avant d'être appliquée a des images entières.
+Cette partie consiste a générer des lignes d'image radar conformément au
+modèle proposée par l'article. La méthode de segmentation choisie sera
+d'abord testée sur ces lignes avant d'être appliquée a des images entières.
 
 \subsection{Ligne d'image non bruitée R(x)}
 
@@ -135,9 +137,9 @@ le nombre moyen de pixels séparant deux sauts d'intensité. On utilise donc le 
 
 % TODO image resultat
 
-\subsection{Bruit Multiplicatif n(x) (Speckle)}
+\subsection{Bruit Speckle Multiplicatif n(x)}
 
-Pour modéliser le Speckle, on utilisera une suite de variables aléatoires indépendantes suivant une loi Gamma de moyenne $\mu_n$ = 1 et de variance $\sigma_n^2$ = 1/L, où L correspond au nombre de vue moyennée.
+Pour modéliser le bruit speckle, on utilisera une suite de variables aléatoires indépendantes suivant une loi Gamma de moyenne $\mu_n$ = 1 et de variance $\sigma_n^2$ = 1/L, où L correspond au nombre de vue moyennée.
 
 \vspace{0.5cm}
 
