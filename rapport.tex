@@ -77,9 +77,9 @@
 
 \begin{abstract}
 
-This report deals with a way to detect the edge using the normalized Ratio Of Exponentially Weighted Average (ROEWA) on opposite sides of the central pixel. It is use in both direction horizontal and vertical, and the magnitude of the two components yields an edge strength map.
+This report deals with a way to detect the edge using the normalized Ratio Of Exponentially Weighted Average (ROEWA) on opposite sides of the central pixel. It thus produces a map of edge with their intensity. In order to improve the result, it can be use in both direction horizontal and vertical, and the magnitude of the two components yields an edge strength map.
 
-This edge detector can cope with the presence of speckle, which can be modeled as a strong multiplicative noise. This report describe step by step the processus used in order to simulate a segmentation with MatLab.
+This edge detector can cope with the presence of speckle, which can be modeled as a strong multiplicative noise. So, It should be used for instance on SAR image. This report describe step by step the processus used in order to simulate a segmentation with MatLab.
 
 \end{abstract}
 
@@ -87,9 +87,9 @@ This edge detector can cope with the presence of speckle, which can be modeled a
 
 \begin{abstract}
 
-    Ce rapport traite d'une méthode de détection de rupture utilisant le rapport des moyennes pondérées exponentiellement (ROEWA) normalisé sur chaque côté d'un pixel central. Elle permet ainsi d'otenir une carte des ruptures en intensité. Pour améliorer son efficacité, le processus peut-être appliqué suivant plusieurs directions, par exemple horizontalement et verticalement, les différentes composantes étant ensuite moyennées quadratiquement.
+    Ce rapport traite d'une méthode de détection de rupture utilisant le rapport des moyennes pondérées exponentiellement (ROEWA) normalisé sur chaque côté d'un pixel central. Elle permet ainsi d'obtenir une carte des ruptures en intensité. Pour améliorer son efficacité, le processus peut-être appliqué suivant plusieurs directions, par exemple horizontalement et verticalement, les différentes composantes étant ensuite moyennées quadratiquement.
 
-    Ce détecteur de rupture est particulièrement adapté pour traiter les signaux avec présence de bruit speckle multiplicatif, tel que les images radars à synthèse d'ouvertue (Synthetic Aperture Radar — SAR). Ce rapport décrit étape par étape la simulation d'une ségmentation sous MaltLab.
+    Ce détecteur de rupture est particulièrement adapté pour traiter les signaux avec présence de bruit speckle multiplicatif, tel que les images radars à synthèse d'ouverture (Synthetic Aperture Radar — SAR). Ce rapport décrit étape par étape la simulation d'une segmentation sous MaltLab.
 
 \end{abstract}
 
@@ -135,7 +135,9 @@ le nombre moyen de pixels séparant deux sauts d'intensité. On utilise donc le 
 
 \vspace{0.5cm}
 
-% TODO image resultat
+\includegraphics[width=15cm]{capture/ergodicité.JPG}
+
+\includegraphics[width=15cm]{capture/Capturer.JPG}
 
 \subsection{Bruit Speckle Multiplicatif n(x)}
 
@@ -147,12 +149,14 @@ Pour modéliser le bruit speckle, on utilisera une suite de variables aléatoire
 
 \vspace{0.5cm}
 
+\includegraphics[width=15cm]{capture/bruit.JPG}
+
 \subsection{Ligne d'image bruitée I(x)}
 
 Pour obtenir une ligne d'image altérée par une bruit multiplicatif, il suffit de multiplier la ligne d'image et le bruit. Soit :
 I(x) = R(x) * n(x).
 
-% TODO image resultat
+\includegraphics[width=15cm]{capture/ligne.JPG}
 
 \newpage
 
@@ -162,8 +166,7 @@ Dans cette partie, le signal synthétique est étudié à l'aide des outils clas
 
 \subsection{Périodogramme}
 
-% TODO image
-% TODO explication
+% TODO Figures à revoir
 
 \vspace{0.5cm}
 
@@ -173,8 +176,7 @@ Dans cette partie, le signal synthétique est étudié à l'aide des outils clas
 
 \subsection{Périodogramme cumulé}
 
-% TODO image
-% TODO explication
+% TODO Figures à revoir
 
 \vspace{0.5cm}
 
@@ -184,8 +186,7 @@ Dans cette partie, le signal synthétique est étudié à l'aide des outils clas
 
 \subsection{Corrélogramme}
 
-% TODO image
-% TODO explication
+\includegraphics[width=15cm]{capture/correlo.JPG}
 
 \vspace{0.5cm}
 
