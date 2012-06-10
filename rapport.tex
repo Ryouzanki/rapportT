@@ -77,9 +77,9 @@
 
 \begin{abstract}
 
-This report deals with a way to detect the edge using the normalized Ratio Of Exponentially Weighted Average (ROEWA) on opposite sides of the central pixel. It thus produces a map of edge with their intensity. In order to improve the result, it can be use in both direction horizontal and vertical, and the magnitude of the two components yields an edge strength map.
+This report deals with a way to detect the edge using the normalized Ratio Of Exponentially Weighted Average (ROEWA) on opposite sides of the central pixel. It thus produces a map of edge with their intensity. In order to improve the result, it can be use in both direction horizontal and vertical, and the magnitude of the two components are then averaged quadratically.
 
-This edge detector can cope with the presence of speckle, which can be modeled as a strong multiplicative noise. So, It should be used for instance on SAR image. This report describe step by step the processus used in order to simulate a segmentation with MatLab.
+This edge detector can cope with the presence of speckle, which can be modeled as a strong multiplicative noise. So, It should be used for instance on SAR image (Synthetic Aperture Radar — SAR). This report describe step by step the processus used in order to simulate a segmentation with MatLab.
 
 \end{abstract}
 
@@ -144,8 +144,6 @@ précédant\end{center}
 
 On peut vérifier que le signal ainsi généré est bien ergodique.
 
-% TODO
-
 \includegraphics[width=15cm]{capture/ergo.JPG}
 
 \subsection{Bruit Speckle Multiplicatif n(x)}
@@ -178,11 +176,9 @@ Dans cette partie, le signal synthétique est étudié à l'aide des outils clas
 \subsection{Périodogramme}
 
 La fonction ci-après permet de générer un périodogramme de notre signal. On peut
-spécifer le type de fenêtre à utiliser et le paramètre $L$ du bruit à utiliser.
+spécifier le type de fenêtre à utiliser et le paramètre $L$ du bruit à utiliser.
 Si le dernier argument n'est pas spécifié, la fonction génère le périodogramme
 d'un signal non bruité.
-
-% TODO Figures à revoir
 
 \vspace{0.5cm}
 
@@ -193,10 +189,8 @@ d'un signal non bruité.
 \subsection{Périodogramme cumulé}
 
 La fonction ci-dessous permet de générer un périodogramme cumulé de notre
-signal, en utilisant la fonction de génération de périodogramme précédante. Il
-est possible de spécifier le nombre de cumule voulu.
-
-% TODO Figures à revoir
+signal, en utilisant la fonction de génération de périodogramme précédant. Il
+est possible de spécifier le nombre d'accumulation voulu.
 
 \vspace{0.5cm}
 
@@ -263,12 +257,12 @@ Nous allons donc pouvoir procéder à la détection de rupture par l'opérateur 
 \FSource{matlab/3-3.m}
 
 Nous utilisons à la fois la partie droite et la partie gauche du filtre afin de
-detecter les ruptures d'intensité de type front montant et celles de type front
+détecter les ruptures d'intensité de type front montant et celles de type front
 descendant. On retient finalement le maximum des deux afin de détecter toutes
 les ruptures.
 
 \includegraphics[width=15cm]{capture3/partie3_05.png}
-\begin{center}Calcul de $r_\textrm{max}$ à pratir de $\mu_1$ et
+\begin{center}Calcul de $r_\textrm{max}$ à partir de $\mu_1$ et
 $\mu_2$\end{center}
 
 \vspace{0.5cm}
@@ -323,7 +317,7 @@ de la moyenne quadratique. On obtient alors le résultat suivant :
 
 \FSource{matlab4/4.m}
 
-La carte des contours obtenue précédement étant en relief, ce seuillage permet
+La carte des contours obtenue précédemment étant en relief, ce seuillage permet
 d'obtenir une carte des contours en deux dimensions.
 
 \includegraphics[width=15cm]{capture4/partie4_08.png}
