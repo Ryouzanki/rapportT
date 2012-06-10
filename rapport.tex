@@ -66,7 +66,7 @@
 \geometry{hmargin=2.5cm,vmargin=1.5cm}
 
 \title{Projet de Traitement du Signal\\Segmentation d'image SAR\\Rapport}
-\author{P.TRAN BA \& E.BOUTTIER}
+\author{Philippe \bsc{Tran Ba} \& Élie \bsc{Bouttier}}
 \date\today
 
 \begin{document}
@@ -127,11 +127,13 @@ Une ligne d'image apparaît comme une juxtaposition de segments de réflectivit�
 Elle est correctement modélisée comme un processus constant par morceaux dont les
 sauts d'intensité obéissent a un processus de Poisson de paramètre $\lambda$. La
 largeur des segments obéit alors à une loi exponentielle de paramètre $\lambda$, $\frac{1}{\lambda}$ représentant
-le nombre moyen de pixels séparant deux sauts d'intensité. On utilise donc le code MatLab suivant afin de générer une ligne d'image non bruitée avec 255.
+le nombre moyen de pixels séparant deux sauts d'intensité. La fonction suivante
+nous permet de générer une ligne d'image SAR, \textrm{largeur} étant sa largeur
+en pixel, et \textrm{profondeur}, le nombre de niveaux d'intensités.
 
 \vspace{0.5cm}
 
-\FSource{matlab/1.m}
+\FSource{matlab/genligne.m}
 
 \vspace{0.5cm}
 
