@@ -53,21 +53,22 @@
 \begin{frame}
 \section{Introduction}
 \begin{itemize}
- \item La segmentation
- \item SAR
- \item Speckle
+ \item La segmentation d'images
+ \item Image SAR
+ \item Bruit speckle
 \end{itemize}
 \end{frame}
 
 \begin{frame}
 \section{Génération d'une ligne d'image SAR}
 \subsection{Génération d'une ligne d'image}
-\FSource{matlab/1.m}
+\FSource{matlab/genligne.m}
 \end{frame}
 
 \begin{frame}
 \begin{center}
-\includegraphics[scale=0.35]{capture/Capturer.JPG}
+\includegraphics[scale=0.35]{capture/Capturer.JPG}\\
+$\mu=1/10, largeur=500, profondeur=256$
 \end{center}
 \end{frame}
 
@@ -76,24 +77,25 @@
 \FSource{matlab/A.m}
 \end{frame}
 
+%\begin{frame}
+%\begin{center}
+%\includegraphics[scale=0.5]{capture/A.png}
+%\end{center}
+%\end{frame}
+
 \begin{frame}
 \subsection{Ligne d'image bruitée}
 \begin{center}
-\includegraphics[scale=0.5]{capture/A.png}
+\includegraphics[scale=0.5]{capture/B.png}\\
+Bruit speackle
 \end{center}
 \end{frame}
 
-\begin{frame}
-\begin{center}
-\includegraphics[scale=0.5]{capture/B.png}
-\end{center}
-\end{frame}
-
-\begin{frame}
-\begin{center}
-\includegraphics[scale=0.5]{capture/C.png}
-\end{center}
-\end{frame}
+%\begin{frame}
+%\begin{center}
+%\includegraphics[scale=0.5]{capture/C.png}
+%\end{center}
+%\end{frame}
 
 \begin{frame}
 \begin{center}
@@ -129,6 +131,10 @@
 
 \begin{frame}
 \section{Détection de rupture sur une image SAR}
+\FSource{matlab/isef.m}
+\end{frame}
+
+\begin{frame}
 \includegraphics[width=10cm]{capture/filtre.png}
 \end{frame}
 
@@ -147,6 +153,12 @@
 \begin{frame}
 \begin{center}
 \includegraphics[scale=0.4]{capture/K.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\includegraphics[scale=0.7]{capture3/partie3_07.png}
 \end{center}
 \end{frame}
 
