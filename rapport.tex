@@ -235,31 +235,53 @@ plusieurs contours dans la fenêtre d'analyse). Les plus proches voisins du pixe
 ainsi favorisés aux dépens de pixels plus éloignés pouvant correspondre a un
 nouveau contour.
 
-Le code MatLab ci dessous nous permet de synthétiser un filtre ISEF et de l'utiliser sur une
-ligne bruitée.
+Le code MatLab ci dessous nous permet de synthétiser un filtre ISEF.
 
 \vspace{0.5cm}
 
-\FSource{matlab/6.m}
+\FSource{matlab/3-1.m}
 
 \vspace{0.5cm}
 
 \includegraphics[width=15cm]{capture/filtre.png}
 
-% TODO image resultat du débruitage
-% TODO explication
+\vspace{0.5cm}
 
-Grâce au filtre ISEF, le bruit est fortement atténué et le signale est bien plus lisible. Nous allons donc pouvoir procéder à la détection de rupture par l'opérateur ROEWA noté $r_{max}$. Nous utilisons donc la suite du programme suivante afin de calculer le tableau des ROEWA :
+\FSource{matlab/3-2.m}
 
 \vspace{0.5cm}
 
-\FSource{matlab/7.m}
+\includegraphics[width=15cm]{capture3/partie3_04.png}
+
+Le bruit ne semble pas atténué de manière flagrante. Cependant, il n'est pas
+amplifié alors que le signal l'est. Il en résulte une augmentation du rapport
+signal sur bruit.
+Nous allons donc pouvoir procéder à la détection de rupture par l'opérateur ROEWA noté $r_{max}$. Nous utilisons donc la suite du programme suivante afin de calculer le résultat de l'opérateur ROEWA :
 
 \vspace{0.5cm}
 
-% TODO image resultat R max
+\FSource{matlab/3-3.m}
 
-Enfin, pour terminer, nous déterminons les ruptures à partir d'un seuil de ROEWA. Nous affichons suite au programme MatLab une figure présentant ROEWA, les ruptures détectées ainsi que le signal non bruité.
+Nous utilisons à la fois la partie droite et la partie gauche du filtre afin de
+detecter les ruptures d'intensité de type front montant et celles de type front
+descendant. On retient finalement le maximum des deux afin de détecter toutes
+les ruptures.
+
+\includegraphics[width=15cm]{capture3/partie3_05.png}
+\begin{center}Calcul de $r_\textrm{max}$ à pratir de $\mu_1$ et
+$\mu_2$\end{center}
+
+\vspace{0.5cm}
+
+\FSource{matlab/3-4.m}
+
+\vspace{0.5cm}
+
+\includegraphics[width=15cm]{capture3/partie3_06.png}
+\begin{center}Observation des corrélations entre $r_\textrm{max}$ et le
+signal\end{center}
+
+Enfin, pour terminer, nous déterminons les ruptures à partir d'un seuil de ROEWA. Nous affichons suite au programme MatLab une figure présentant ROEWA, les ruptures détectées ainsi que le signal non bruité pour vérification.
 
 \vspace{0.5cm}
 
@@ -267,7 +289,7 @@ Enfin, pour terminer, nous déterminons les ruptures à partir d'un seuil de ROE
 
 \vspace{0.5cm}
 
-% TODO image awesome resultat avec les 3 couleurs
+\includegraphics[width=15cm]{capture3/partie3_07.png}
 
 \newpage
 
