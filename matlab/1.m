@@ -4,7 +4,7 @@ k = 1; % compteur a ne pas toucher
 Suite_symbole = zeros(1,N); % Preallocation de la memoire
 
 while(k<N)
-    i = floor(rand*256);  % Une intensite entre 0 et 255
+    i = floor(rand*255);  % Une intensite entre 0 et 255
     for j = 1:ceil(exprnd(mu))
         Suite_symbole(k) = i; % propager i sur j pixel
         k = k+1;
