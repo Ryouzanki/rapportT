@@ -127,9 +127,10 @@ Une ligne d'image apparaît comme une juxtaposition de segments de réflectivit�
 Elle est correctement modélisée comme un processus constant par morceaux dont les
 sauts d'intensité obéissent a un processus de Poisson de paramètre $\lambda$. La
 largeur des segments obéit alors à une loi exponentielle de paramètre $\lambda$, $\frac{1}{\lambda}$ représentant
-le nombre moyen de pixels séparant deux sauts d'intensité. La fonction suivante
-nous permet de générer une ligne d'image SAR, \textrm{largeur} étant sa largeur
-en pixel, et \textrm{profondeur}, le nombre de niveaux d'intensités.
+le nombre moyen de pixels séparant deux sauts d'intensité. Ainsi, un paramètre
+${\lambda}$ plus grand donnera lieu à des segments de longueur plus importante. La fonction suivante
+nous permet de générer une ligne d'image SAR, \texttt{largeur} étant sa largeur
+en pixel, et \texttt{profondeur}, le nombre de niveaux d'intensités.
 
 \vspace{0.5cm}
 
@@ -137,13 +138,19 @@ en pixel, et \textrm{profondeur}, le nombre de niveaux d'intensités.
 
 \vspace{0.5cm}
 
-\includegraphics[width=15cm]{capture/ergo.JPG}
-
 \includegraphics[width=15cm]{capture/Capturer.JPG}
+\begin{center}Exemple d'une ligne de pixel généré suivant le procédé
+précédant\end{center}
+
+On peut vérifier que le signal ainsi généré est bien ergodique.
+
+% TODO
+
+\includegraphics[width=15cm]{capture/ergo.JPG}
 
 \subsection{Bruit Speckle Multiplicatif n(x)}
 
-Pour modéliser le bruit speckle, on utilisera une suite de variables aléatoires indépendantes suivant une loi Gamma de moyenne $\mu_n$ = 1 et de variance $\sigma_n^2$ = 1/L, où L correspond au nombre de vue moyennée.
+Pour modéliser le bruit speckle, on utilisera une suite de variables aléatoires indépendantes suivant une loi Gamma de moyenne $\mu_n = 1$ et de variance $\sigma_n^2 = 1/L$, où $L$ correspond au nombre de vue moyennée.
 
 \vspace{0.5cm}
 
@@ -156,9 +163,11 @@ Pour modéliser le bruit speckle, on utilisera une suite de variables aléatoire
 \subsection{Ligne d'image bruitée I(x)}
 
 Pour obtenir une ligne d'image altérée par une bruit multiplicatif, il suffit de multiplier la ligne d'image et le bruit. Soit :
-I(x) = R(x) * n(x).
+$$I(x) = R(x) * n(x)$$.
 
 \includegraphics[width=15cm]{capture/ligne.JPG}
+\begin{center}Observation de l'influence du paramètre $L$ sur la ligne
+bruité\end{center}
 
 \newpage
 
@@ -167,6 +176,11 @@ I(x) = R(x) * n(x).
 Dans cette partie, le signal synthétique est étudié à l'aide des outils classiques d'analyse spectrale (corrélogramme, périodogramme).
 
 \subsection{Périodogramme}
+
+La fonction ci-après permet de générer un périodogramme de notre signal. On peut
+spécifer le type de fenêtre à utiliser et le paramètre $L$ du bruit à utiliser.
+Si le dernier argument n'est pas spécifié, la fonction génère le périodogramme
+d'un signal non bruité.
 
 % TODO Figures à revoir
 
@@ -178,6 +192,10 @@ Dans cette partie, le signal synthétique est étudié à l'aide des outils clas
 
 \subsection{Périodogramme cumulé}
 
+La fonction ci-dessous permet de générer un périodogramme cumulé de notre
+signal, en utilisant la fonction de génération de périodogramme précédante. Il
+est possible de spécifier le nombre de cumule voulu.
+
 % TODO Figures à revoir
 
 \vspace{0.5cm}
@@ -188,11 +206,13 @@ Dans cette partie, le signal synthétique est étudié à l'aide des outils clas
 
 \subsection{Corrélogramme}
 
-\includegraphics[width=15cm]{capture/correlo.JPG}
+Le corrélogramme est généré par la fonction ci-après.
+
+\FSource{matlab/5.m}
 
 \vspace{0.5cm}
 
-\FSource{matlab/5.m}
+\includegraphics[width=15cm]{capture/correlo.JPG}
 
 \vspace{0.5cm}
 
@@ -262,13 +282,37 @@ ROEWA est d'abord appliqué successivement a chaque ligne de l'image, préalable
 lissée dans la direction opposée, pour obtenir la carte horizontale des contours $r_X (x, y)$.
 En opérant de façon similaire dans la direction verticale, la carte verticale des contours
 est construite. Ces deux composantes peuvent alors être combinées pour former la carte
-des contours en deux dimensions : $r_{2D}(x,y)=\sqrt{{r^2}_X+{r^2}_Y}$
+des contours en relief : $r_{2D}(x,y)=\sqrt{{r^2}_X+{r^2}_Y}$
 
-% TODO code matlab
-% TODO bourge
+\vspace{0.5cm}
+\FSource{matlab4/1.m}
+\vspace{0.5cm}
+\includegraphics[width=15cm]{capture4/partie4_02.png}
+\vspace{0.5cm}
+\FSource{matlab4/2.m}
+\includegraphics[width=15cm]{capture4/partie4_06.png}
+\vspace{0.5cm}
+\FSource{matlab4/3.m}
+
+Ce traitement final consiste à combiner les deux résultats précédant au moyen
+de la moyenne quadratique. On obtient alors le résultat suivant :
+
+\includegraphics[width=15cm]{capture4/partie4_07.png}
+
+\FSource{matlab4/4.m}
+
+La carte des contours obtenue précédement étant en relief, ce seuillage permet
+d'obtenir une carte des contours en deux dimensions.
+
+\includegraphics[width=15cm]{capture4/partie4_08.png}
+
 
 \newpage
 
 \section{Conclusion}
+Nous avons pu voir dans ce rapport une méthode de détection de contours pour les
+images SAR. Celle-ci, basé sur l'opérateur ROEWA, est particulièrement efficace
+pour ce type d'image grâce à son moyennage pondéré exponentiellement.
+
 
 \end{document}
