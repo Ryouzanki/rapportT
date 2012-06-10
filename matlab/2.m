@@ -2,17 +2,18 @@ L = 1; % nombre de vues moyennees
 N = 500; % nb de valeur
 Nc = 80; % nombre de classe
 
+%Générer l'histogramme normalisé
 bruit_mult = gamrnd(L, 1/L, 1, N);
-l = linspace(min(bruit_mult),max(bruit_mult),Nc);
-h = hist(bruit_mult,l);
-delta_bruit_mult = (max(bruit_mult)-min(bruit_mult))/Nc;
-hist(bruit_mult,l);
-hist_norm = h/(delta_bruit_mult * length(bruit_mult));
-
-densite_theorique = gampdf(L, 1/L, 1:length(l));
-hold off
-bar(l,hist_norm/3,'FaceColor',[0 0 1]); % TRUC DE VOLEUR
+[hist abs] = hist(bruit_mult,Nc);
+bruit_th = gampdf(abs, L, 1/L);
+Nc = 50; 
+dx = (max(bruit_mult)-min(bruit_mult))/Nc;
+%Affichage de l'histogramme normalisé
+figure('name', 'Bruit multiplicatif n(x)')
+bar(abs, hist/(dx*length(bruit_mult)));
+title('Histogramme normalisé et fonction de répartition de loi Gamma')
 hold on
-plot(l, (densite_theorique-0.01)*1.2, 'r') % TRCU DE BANDIT
+%Affichage de la fonction de répartition théorique
+plot(abs, bruit_th, 'r');
 
 n = bruit_mult;
