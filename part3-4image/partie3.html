@@ -1,0 +1,367 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>partie3</title><meta name="generator" content="MATLAB 7.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2012-06-10"><meta name="DC.source" content="partie3.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">3i&Atilde;&uml;me Partie : D&Atilde;&copy;tection de ruptures sur une ligne d'image SAR</a></li><li><a href="#2">G&Atilde;&copy;n&Atilde;&copy;ration du signal bruit&Atilde;&copy; par un bruit de scintillement multiplicatif</a></li><li><a href="#3">G&Atilde;&copy;n&Atilde;&copy;ration du filre ISEF</a></li><li><a href="#4">Rapport des moyennes pond&Atilde;&copy;r&Atilde;&copy;es exponentiellement</a></li><li><a href="#5">D&Atilde;&copy;termination des transitions</a></li></ul></div><h2>3i&Atilde;&uml;me Partie : D&Atilde;&copy;tection de ruptures sur une ligne d'image SAR<a name="1"></a></h2><pre class="codeinput">close <span class="string">all</span>
+clear <span class="string">all</span>
+clc
+</pre><h2>G&Atilde;&copy;n&Atilde;&copy;ration du signal bruit&Atilde;&copy; par un bruit de scintillement multiplicatif<a name="2"></a></h2><pre class="codeinput"><span class="comment">% Param&Atilde;&uml;tres</span>
+profondeur = 32 <span class="comment">% Pr&Atilde;&copy;cision de la quantification</span>
+N = 2000 <span class="comment">% Taille de notre ligne en pixel</span>
+mu = 150 <span class="comment">% Nombre moyen de pixel entre deux ruptures d'intensit&Atilde;&copy;</span>
+lambda = 1/mu
+L = 500 <span class="comment">% Param&iuml;&iquest;&frac12;tre du bruit</span>
+
+<span class="comment">% G&Atilde;&copy;n&Atilde;&copy;ration d'une ligne de pixels</span>
+ligne = genligne(lambda, N, profondeur);
+subplot(3, 1, 1);
+plot(ligne);
+title(<span class="string">'Ligne non bruit&iuml;&iquest;&frac12;'</span>);
+
+<span class="comment">% G&Atilde;&copy;n&Atilde;&copy;ration du bruit de scintillement</span>
+bruit = gamrnd(L, 1/L, 1, N);
+subplot(3, 1, 2);
+plot(bruit)
+title(<span class="string">'Bruit de scintillement'</span>);
+
+<span class="comment">% Multiplication de notre ligne par le bruit</span>
+ligne_bruite = ligne .* bruit;
+subplot(3, 1, 3);
+plot(ligne_bruite);
+title(<span class="string">'Ligne bruit&iuml;&iquest;&frac12;'</span>);
+figure;
+</pre><pre class="codeoutput">
+profondeur =
+
+    32
+
+
+N =
+
+        2000
+
+
+mu =
+
+   150
+
+
+lambda =
+
+    0.0067
+
+
+L =
+
+   500
+
+</pre><img vspace="5" hspace="5" src="partie3_01.png" alt=""> <img vspace="5" hspace="5" src="partie3_02.png" alt=""> <h2>G&Atilde;&copy;n&Atilde;&copy;ration du filre ISEF<a name="3"></a></h2><pre class="codeinput"><span class="comment">% Param&Atilde;&uml;tres</span>
+muI = mean(ligne);
+sigmaI = sqrt(var(ligne_bruite));
+
+muR = muI;
+sigmaR = (L*sigmaI^2 - muI^2) / (L + 1);
+
+alpha = sqrt(((2*L*lambda) / (1 + (muR/sigmaR)^2)) + lambda^2);
+C = alpha/2;
+
+order = 199
+
+<span class="comment">% G&iuml;&iquest;&frac12;n&iuml;&iquest;&frac12;ration de la r&Atilde;&copy;ponse impulsionnelle</span>
+ISEF = C * exp(-alpha*abs([-(order-1)/2:1:order/2]));
+plot(ISEF);
+title(<span class="string">'Impulse reponse of ISEF'</span>);
+
+<span class="comment">% Filtrage du signal. Celui-ci est along&Atilde;&copy; de la longueur du retard afin</span>
+<span class="comment">% de pouvoir effectuer le filtrage jusqu'au bout.</span>
+ligne_debruite = filter(ISEF, 1, [ligne_bruite zeros(1, ceil(order/2))]);
+ligne_debruite = ligne_debruite(1, ceil(order/2):end); <span class="comment">% Suppression du retard</span>
+figure
+plot(ligne_bruite, <span class="string">'b'</span>);
+hold <span class="string">on</span>
+plot(ligne_debruite, <span class="string">'r'</span>);
+title(<span class="string">'Comparaison signal bruit&iuml;&iquest;&frac12; et signal d&Atilde;&copy;bruit&Atilde;&copy;'</span>);
+legend(<span class="string">'Signal bruit&Atilde;&copy;'</span>, <span class="string">'Signal d&Atilde;&copy;bruit&Atilde;&copy;'</span>);
+</pre><pre class="codeoutput">
+order =
+
+   199
+
+</pre><img vspace="5" hspace="5" src="partie3_03.png" alt=""> <img vspace="5" hspace="5" src="partie3_04.png" alt=""> <h2>Rapport des moyennes pond&Atilde;&copy;r&Atilde;&copy;es exponentiellement<a name="4"></a></h2><pre class="codeinput"><span class="comment">% S&iuml;&iquest;&frac12;paration des parties droite et gauche du filtre ISEF</span>
+ISEF1 = [ISEF(1, 1:ceil(order/2)) zeros(1, ceil(order/2))];
+ISEF2 = [zeros(1, ceil(order/2)) ISEF(1, ceil(order/2):end)];
+
+<span class="comment">% Filtrage du signal par les deux filtres</span>
+mu1 = abs(filter(ISEF1, 1, [ligne_debruite zeros(1, floor(order/2))]));
+mu1 = mu1(1, floor(order/2):end); <span class="comment">% Suppression du retard</span>
+mu2 = abs(filter(ISEF2, 1, [ligne_debruite zeros(1, floor(order/2))]));
+mu2 = mu2(1, floor(order/2):end); <span class="comment">% Suppression du retard</span>
+
+figure;
+subplot(5, 1, 1);
+plot(mu1);
+title(<span class="string">'mu1'</span>);
+subplot(5, 1, 2);
+plot(mu2);
+title(<span class="string">'mu2'</span>);
+subplot(5, 1, 3);
+plot(mu1./mu2);
+title(<span class="string">'mu1/mu2'</span>);
+subplot(5, 1, 4);
+plot(mu2./mu1);
+title(<span class="string">'mu2/mu1'</span>);
+subplot(5, 1, 5);
+<span class="comment">% Calcul de Rmax</span>
+rmax = max(mu1./mu2, mu2./mu1);
+plot(rmax);
+title(<span class="string">'Rmax'</span>);
+
+<span class="comment">% Observation de Rmax supperpos&iuml;&iquest;&frac12; avec le signal bruit&iuml;&iquest;&frac12;</span>
+figure;
+plot(ligne_bruite, <span class="string">'b'</span>);
+hold <span class="string">on</span>;
+plot(rmax, <span class="string">'r'</span>, <span class="string">'LineWidth'</span>, 1.5);
+legend(<span class="string">'Signal bruit&Atilde;&copy;'</span>, <span class="string">'Rmax'</span>);
+hold <span class="string">off</span>
+</pre><img vspace="5" hspace="5" src="partie3_05.png" alt=""> <img vspace="5" hspace="5" src="partie3_06.png" alt=""> <h2>D&Atilde;&copy;termination des transitions<a name="5"></a></h2><pre class="codeinput">seuil = 1.2 <span class="comment">% Seuil de d&Atilde;&copy;tection des transitions</span>
+
+p = 0;
+trans = [];
+
+figure
+plot(ligne, <span class="string">'b'</span>, <span class="string">'LineWidth'</span>, 1); <span class="comment">% Signal non bruit&Atilde;&copy; (pour v&Atilde;&copy;rification)</span>
+hold <span class="string">on</span>
+plot(rmax-2, <span class="string">'r'</span>); <span class="comment">% Rmax (-2 pour &Atilde;&copy;viter les superpositions sur le graphe)</span>
+
+<span class="keyword">for</span> i = 2:N-1;
+    <span class="comment">% D&Atilde;&copy;tection des maximums locaux</span>
+    <span class="keyword">if</span> rmax(i-1)&lt;rmax(i) &amp;&amp; rmax(i)&gt;rmax(i+1);
+        <span class="comment">% V&Atilde;&copy;rification que le maximum d&Atilde;&copy;passe le seuil</span>
+        <span class="keyword">if</span> rmax(i) &gt; seuil;
+            p = p+1;
+            trans(p) = i-1;
+            x = [trans(p);trans(p)];
+            y = [min(ligne(i-2:i+2)), max(ligne(i-2:i+2))];
+            line(x, y, <span class="string">'color'</span>,<span class="string">'g'</span>, <span class="string">'LineWidth'</span>, 2)
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+legend(<span class="string">'Signal (avant bruitage)'</span>, <span class="string">'Rmax'</span>, <span class="string">'Transitions'</span>);
+
+trans
+</pre><pre class="codeoutput">
+seuil =
+
+    1.2000
+
+
+trans =
+
+  Columns 1 through 6
+
+          17          32         383         475         482         488
+
+  Columns 7 through 9
+
+         892         907        1416
+
+</pre><img vspace="5" hspace="5" src="partie3_07.png" alt=""> <p class="footer"><br>
+      Published with MATLAB&reg; 7.13<br></p></div><!--
+##### SOURCE BEGIN #####
+%%% 3iÃ¨me Partie : DÃ©tection de ruptures sur une ligne d'image SAR
+
+close all
+clear all
+clc
+
+%% GÃ©nÃ©ration du signal bruitÃ© par un bruit de scintillement multiplicatif
+
+% ParamÃ¨tres
+profondeur = 32 % PrÃ©cision de la quantification
+N = 2000 % Taille de notre ligne en pixel
+mu = 150 % Nombre moyen de pixel entre deux ruptures d'intensitÃ©
+lambda = 1/mu
+L = 500 % Paramï¿½tre du bruit
+
+% GÃ©nÃ©ration d'une ligne de pixels
+ligne = genligne(lambda, N, profondeur);
+subplot(3, 1, 1);
+plot(ligne);
+title('Ligne non bruitï¿½');
+
+% GÃ©nÃ©ration du bruit de scintillement
+bruit = gamrnd(L, 1/L, 1, N);
+subplot(3, 1, 2);
+plot(bruit)
+title('Bruit de scintillement');
+
+% Multiplication de notre ligne par le bruit
+ligne_bruite = ligne .* bruit;
+subplot(3, 1, 3);
+plot(ligne_bruite);
+title('Ligne bruitï¿½');
+figure;
+
+
+%% GÃ©nÃ©ration du filre ISEF
+
+% ParamÃ¨tres
+muI = mean(ligne);
+sigmaI = sqrt(var(ligne_bruite));
+
+muR = muI;
+sigmaR = (L*sigmaI^2 - muI^2) / (L + 1);
+
+alpha = sqrt(((2*L*lambda) / (1 + (muR/sigmaR)^2)) + lambda^2);
+C = alpha/2;
+
+order = 199
+
+% Gï¿½nï¿½ration de la rÃ©ponse impulsionnelle
+ISEF = C * exp(-alpha*abs([-(order-1)/2:1:order/2]));
+plot(ISEF);
+title('Impulse reponse of ISEF');
+
+% Filtrage du signal. Celui-ci est alongÃ© de la longueur du retard afin
+% de pouvoir effectuer le filtrage jusqu'au bout.
+ligne_debruite = filter(ISEF, 1, [ligne_bruite zeros(1, ceil(order/2))]);
+ligne_debruite = ligne_debruite(1, ceil(order/2):end); % Suppression du retard
+figure
+plot(ligne_bruite, 'b');
+hold on
+plot(ligne_debruite, 'r');
+title('Comparaison signal bruitï¿½ et signal dÃ©bruitÃ©');
+legend('Signal bruitÃ©', 'Signal dÃ©bruitÃ©');
+
+
+%% Rapport des moyennes pondÃ©rÃ©es exponentiellement
+
+% Sï¿½paration des parties droite et gauche du filtre ISEF
+ISEF1 = [ISEF(1, 1:ceil(order/2)) zeros(1, ceil(order/2))];
+ISEF2 = [zeros(1, ceil(order/2)) ISEF(1, ceil(order/2):end)];
+
+% Filtrage du signal par les deux filtres
+mu1 = abs(filter(ISEF1, 1, [ligne_debruite zeros(1, floor(order/2))]));
+mu1 = mu1(1, floor(order/2):end); % Suppression du retard
+mu2 = abs(filter(ISEF2, 1, [ligne_debruite zeros(1, floor(order/2))]));
+mu2 = mu2(1, floor(order/2):end); % Suppression du retard
+
+figure;
+subplot(5, 1, 1);
+plot(mu1);
+title('mu1');
+subplot(5, 1, 2);
+plot(mu2);
+title('mu2');
+subplot(5, 1, 3);
+plot(mu1./mu2);
+title('mu1/mu2');
+subplot(5, 1, 4);
+plot(mu2./mu1);
+title('mu2/mu1');
+subplot(5, 1, 5);
+% Calcul de Rmax
+rmax = max(mu1./mu2, mu2./mu1);
+plot(rmax);
+title('Rmax');
+
+% Observation de Rmax supperposï¿½ avec le signal bruitï¿½
+figure;
+plot(ligne_bruite, 'b');
+hold on;
+plot(rmax, 'r', 'LineWidth', 1.5);
+legend('Signal bruitÃ©', 'Rmax');
+hold off
+
+
+%% DÃ©termination des transitions
+
+seuil = 1.2 % Seuil de dÃ©tection des transitions
+
+p = 0;
+trans = [];
+
+figure
+plot(ligne, 'b', 'LineWidth', 1); % Signal non bruitÃ© (pour vÃ©rification)
+hold on
+plot(rmax-2, 'r'); % Rmax (-2 pour Ã©viter les superpositions sur le graphe)
+
+for i = 2:N-1;
+    % DÃ©tection des maximums locaux
+    if rmax(i-1)<rmax(i) && rmax(i)>rmax(i+1);
+        % VÃ©rification que le maximum dÃ©passe le seuil
+        if rmax(i) > seuil;
+            p = p+1;
+            trans(p) = i-1;
+            x = [trans(p);trans(p)];
+            y = [min(ligne(i-2:i+2)), max(ligne(i-2:i+2))];
+            line(x, y, 'color','g', 'LineWidth', 2)
+        end
+    end
+end
+legend('Signal (avant bruitage)', 'Rmax', 'Transitions');
+
+trans
+
+##### SOURCE END #####
+--></body></html>
