@@ -1,5 +1,5 @@
 L = 1; % nombre de vues moyennees
-N = 500; % nb de valeur
+N = 500; % nombre de valeur
 Nc = 80; % nombre de classe
 
 %Generer l'histogramme normalise

@@ -1,11 +1,15 @@
 function [ corr_sym ] = correlogramme( lambda, largeur, profondeur, fenetre, zlargeur )
 
+    % Generation d'une ligne
     ligne = genligne(lambda, largeur, profondeur);
     
+    % Fenetrage
     ligne = ligne .* fenetre;
     
+    % Fonction d'autocorrelation
     corr = xcov(ligne, 'biased');
     
+    % Symetrisation de la fonction d'autocorrelation 
     part1 = corr(1, largeur:end);
     part2 = zeros(1, zlargeur);
     part3 = 0;
